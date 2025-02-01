@@ -49,8 +49,7 @@ const columns = [
         <Select
           v-if="!slotProps.data.daily"
           v-model="slotProps.data.weekday"
-          :options="week"
-          optionLabel="name"
+          :options="week.map(item => item.name)"
           placeholder="Select"
         />
       </template>
@@ -77,7 +76,6 @@ const columns = [
     <Column :field="columns[5].field" :header="columns[5].header">
       <template #body="{ data }">
         <Checkbox
-          v-model="data.delete"
           :name="columns[3].header + data.name"
           :inputId="columns[3].header + data.name"
           :key="columns[3].header + data.name"

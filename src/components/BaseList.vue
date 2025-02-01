@@ -2,13 +2,10 @@
 import BaseButton from '@/components/BaseButton.vue'
 import BaseListTable from '@/components/BaseListTable.vue'
 import { ref, watch, onMounted } from 'vue'
-import { str } from '@/scheme/weekMok.js'
+import { defaultWeek, str } from '@/scheme/weekMok.js'
 import type { Iproduct } from '@/scheme/interfaces.js'
 
-const products = ref<Iproduct[]>([
-  // { name: 'Молоко', hours: 2, daily: true, delete: false, datepicker: null },
-  // { name: 'ad', hours: 3, daily: false, delete: false, datepicker: null },
-])
+const products = ref<Iproduct[]>([])
 
 const week = [
   {
@@ -37,9 +34,12 @@ const addItem = () => {
     name: '',
     hours: 0,
     daily: false,
-    delete: false,
-    datepicker: null,
+    weekday: '',
   })
+}
+
+const exportDefault = () => {
+  products.value = defaultWeek
 }
 
 const exportWeek = (str: string) => {
@@ -58,6 +58,7 @@ const exportWeek = (str: string) => {
   )
   itemsMass.forEach((item) => {
     if (item.length < 2) return
+
     if (item.search(/[^А-Яа-яA-Za-z/,. ]/g) == -1) {
       itemCur.push(item)
     } else {
@@ -81,8 +82,7 @@ const exportWeek = (str: string) => {
       name: item[0] as string,
       hours: item[item.length - 1] as number,
       daily: false,
-      delete: false,
-      datepicker: null,
+      weekday: '',
     }),
   )
 
@@ -99,6 +99,21 @@ const generateScheduler = () => {
   )
 
   products.value.forEach((item) => {
+    if(item.weekday) {
+      weekGenerator.forEach((day) => {
+        if(day.name === item.weekday) {
+          day.tasks.push(item)
+          day.count += item.hours
+        }
+      })
+    }
+  })
+
+  products.value.forEach((item) => {
+    if(item.weekday) {
+      return;
+    }
+
     if (item.daily) {
       weekGenerator.forEach((day) => {
         day.tasks.push(item)
@@ -171,6 +186,7 @@ watch(
 <template>
   <div class="panel">
     <BaseButton text="Экспортировать" @click="() => exportWeek(str)" />
+    <BaseButton text="Экспортировать дефолтное" @click="() => exportDefault()" />
   </div>
 
   <BaseListTable :products="products" :week="week" @removeItem="removeItem" @addItem="addItem" />

@@ -1,3 +1,44 @@
+import type { Iproduct } from "./interfaces";
+
+export const defaultWeek:Iproduct[] = [
+  {
+    name: 'Составление отчета/плана за неделю',
+    hours: 1.5,
+    daily: false,
+    weekday: 'Пн',
+  },
+  {
+    name: 'Встреча лидов направлений',
+    hours: 1,
+    daily: false,
+    weekday: 'Пт',
+  },
+  {
+    name: 'Встреча по планированию загрузки по проектам',
+    hours: 0.2,
+    daily: false,
+    weekday: 'Пт',
+  },
+  {
+    name: 'BNG',
+    hours: 1.5,
+    daily: true,
+    weekday: '',
+  },
+  {
+    name: 'RAG AI',
+    hours: 0.8,
+    daily: true,
+    weekday: '',
+  },
+  {
+    name: 'В-З',
+    hours: 4,
+    daily: false,
+    weekday: '',
+  },
+];
+
 export const str: string = `Направление
 
 Задача
