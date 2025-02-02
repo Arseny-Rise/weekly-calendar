@@ -19,7 +19,10 @@ onMounted(() => {
       <div>
         <h2 class="column__title">{{ item.name }}</h2>
         <div class="cards">
-          <div class="card" @click="({currentTarget}) => currentTarget!.classList.toggle('_completed')" :style="{height: task.hours * 100 + 'px'}" v-for="task in item.tasks" :key="task.name">
+          <div class="card" @click="(e) => {
+              let target = e.currentTarget as HTMLElement
+              target!.classList.toggle('_completed')
+          }" :style="{height: task.hours * 100 + 'px'}" v-for="task in item.tasks" :key="task.name">
             <div class="card__inner">
               <span class="card__title" v-tooltip.top="task.name.length > 40 && task.name">{{ task.name }}<span style="opacity: 0;">;</span></span>
 
