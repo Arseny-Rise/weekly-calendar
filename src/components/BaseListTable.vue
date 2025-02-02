@@ -16,7 +16,6 @@ defineEmits(['removeItem', 'addItem'])
 const columns = [
   { field: 'name', header: 'Название' },
   { field: 'hours', header: 'Часов' },
-  // { field: 'datepicker', header: 'DatePicker' },
   { field: 'weekday', header: 'День недели' },
   { field: 'daily', header: 'Ежедневная' },
   { field: 'all', header: 'Всего' },
@@ -37,12 +36,6 @@ const columns = [
         <InputNumber :maxFractionDigits="2" v-model.number="data.hours" />
       </template>
     </Column>
-
-    <!-- <Column :field="columns[2].field" :header="columns[2].header">
-      <template #body="slotProps">
-        <DatePicker v-if="!slotProps.data.daily" v-model="slotProps.data.datepicker" />
-      </template>
-    </Column> -->
 
     <Column :field="columns[2].field" :header="columns[2].header">
       <template #body="slotProps">
@@ -86,12 +79,20 @@ const columns = [
     </Column>
 
     <template #footer>
-      <BaseButton text="Add item" @click="$emit('addItem')" />
-      Total {{ total }}
+      <BaseButton text="Добавить" @click="$emit('addItem')" />
+      <span>
+        Total {{ total }}
+      </span>
     </template>
 
     <template #empty> Ничего не найдено </template>
   </DataTable>
 </template>
 
-<style scoped></style>
+<style scoped>
+:deep(.p-datatable-footer) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+</style>

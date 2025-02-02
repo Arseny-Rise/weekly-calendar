@@ -7,3 +7,9 @@ export interface Iproduct {
   datepicker?: null
   all?: number
 }
+
+export interface IweekGenerator {
+  name: string
+  tasks: Iproduct[]
+  count: number
+}

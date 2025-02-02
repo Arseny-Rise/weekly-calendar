@@ -3,7 +3,11 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseListTable from '@/components/BaseListTable.vue'
 import { ref, watch, onMounted } from 'vue'
 import { defaultWeek, str } from '@/scheme/weekMok.js'
-import type { Iproduct } from '@/scheme/interfaces.js'
+import type { Iproduct, IweekGenerator } from '@/scheme/interfaces.js'
+import { useShedulerStore } from '../stores/sheduler';
+import router from '../router/index';
+
+const shedulerStore = useShedulerStore()
 
 const products = ref<Iproduct[]>([])
 
@@ -90,7 +94,7 @@ const exportWeek = (str: string) => {
 }
 
 const generateScheduler = () => {
-  const weekGenerator: { name: string; tasks: Iproduct[]; count: number }[] = week.map(
+  const weekGenerator: IweekGenerator[] = week.map(
     ({ name }) => ({
       name,
       tasks: [],
@@ -153,6 +157,10 @@ const generateScheduler = () => {
     }
   })
 
+  shedulerStore.updateItems(weekGenerator)
+
+  router.push({ name: 'sheduler' })
+
   console.log(
     weekGenerator,
     weekGenerator.reduce((a, b) => a + b.count, 0),
@@ -199,8 +207,8 @@ watch(
 <style scoped>
 .panel {
   display: flex;
-  justify-content: space-between;
+  gap: 8px;
   padding: 16px;
-  background-color: #e98585;
+  background-color: #ff8181;
 }
 </style>
