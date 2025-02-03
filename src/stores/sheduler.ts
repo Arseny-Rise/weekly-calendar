@@ -3,11 +3,11 @@ import { defineStore } from 'pinia'
 import type { IweekGenerator } from '@/scheme/interfaces'
 
 export const useShedulerStore = defineStore('sheduler', () => {
-  const items = ref<IweekGenerator[]>([])
+  const sheduler = ref<IweekGenerator[]>([])
 
-  const updateItems = (newItems: IweekGenerator[]) => {
-    items.value = newItems
+  const updateSheduler = (newItems: IweekGenerator[]) => {
+    sheduler.value = newItems
   }
 
-  return { items, updateItems }
+  return { sheduler, updateSheduler }
 })

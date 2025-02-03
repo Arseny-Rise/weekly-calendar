@@ -157,7 +157,8 @@ const generateScheduler = () => {
     }
   })
 
-  shedulerStore.updateItems(weekGenerator)
+  shedulerStore.updateSheduler(weekGenerator)
+  localStorage.setItem('preset ' + new Date().toLocaleString(), JSON.stringify(weekGenerator))
 
   router.push({ name: 'sheduler' })
 
@@ -179,6 +180,13 @@ const updateRowHours = () => {
 }
 
 onMounted(() => {
+  const preset = router.currentRoute.value.query.preset;
+  if(preset) {
+    const data = JSON.parse(localStorage.getItem(preset)).map(item => item.tasks).flat()
+    console.log(data)
+    products.value = data
+  }
+
   updateRowHours()
 })
 

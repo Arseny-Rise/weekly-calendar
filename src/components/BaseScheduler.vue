@@ -5,17 +5,17 @@ import { storeToRefs } from 'pinia';
 import router from '@/router';
 const shedulerStore = useShedulerStore()
 
-const { items } = storeToRefs(shedulerStore)
+const { sheduler } = storeToRefs(shedulerStore)
 
 onMounted(() => {
-  if(items.value.length === 0) router.push({ name: 'home' })
+  if(sheduler.value.length === 0) router.push({ name: 'presets' })
 })
 
 </script>
 
 <template>
   <div class="columns">
-    <div class="column" v-for="item in items" :key="item.name">
+    <div class="column" v-for="item in sheduler" :key="item.name">
       <div>
         <h2 class="column__title">{{ item.name }}</h2>
         <div class="cards">
