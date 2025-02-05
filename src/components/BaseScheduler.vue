@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, unref } from 'vue';
 import { useShedulerStore } from '../stores/sheduler';
 import { storeToRefs } from 'pinia';
 import router from '@/router';
@@ -8,21 +8,32 @@ const shedulerStore = useShedulerStore()
 const { sheduler } = storeToRefs(shedulerStore)
 
 onMounted(() => {
-  if(sheduler.value.length === 0) router.push({ name: 'presets' })
+  if(sheduler.value?.length === 0) router.push({ name: 'presets' })
 })
+
+const changeStatus = (colIdx:number, taskIdx:number) => {
+  console.log(colIdx, taskIdx)
+  if(sheduler.value[colIdx].tasks[taskIdx]?.disabled) {
+    sheduler.value[colIdx].tasks[taskIdx].disabled = false
+  } else {
+    sheduler.value[colIdx].tasks[taskIdx].disabled = true
+  }
+
+  const preset = router.currentRoute.value.query.preset as string;
+  if(preset) {
+    localStorage.setItem(preset, JSON.stringify(unref(sheduler)))
+  }
+}
 
 </script>
 
 <template>
   <div class="columns">
-    <div class="column" v-for="item in sheduler" :key="item.name">
+    <div class="column" v-for="(item,colIdx) in sheduler" :key="item.name">
       <div>
         <h2 class="column__title">{{ item.name }}</h2>
         <div class="cards">
-          <div class="card" @click="(e) => {
-              let target = e.currentTarget as HTMLElement
-              target!.classList.toggle('_completed')
-          }" :style="{height: task.hours * 100 + 'px'}" v-for="task in item.tasks" :key="task.name">
+          <div :class="['card', task?.disabled && '_completed']" @click="(e) => changeStatus(colIdx, taskIdx)" :style="{height: task.hours * 100 + 'px'}" v-for="(task, taskIdx) in item.tasks" :key="task.name + taskIdx">
             <div class="card__inner">
               <span class="card__title" v-tooltip.top="task.name.length > 40 && task.name">{{ task.name }}<span style="opacity: 0;">;</span></span>
 

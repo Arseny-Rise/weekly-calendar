@@ -4,8 +4,8 @@ export interface Iproduct {
   hours: number
   daily: boolean
   weekday?: WeekDays
-  datepicker?: null
   all?: number
+  disabled?: boolean
 }
 
 export interface IweekGenerator {

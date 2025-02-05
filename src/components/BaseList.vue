@@ -158,9 +158,10 @@ const generateScheduler = () => {
   })
 
   shedulerStore.updateSheduler(weekGenerator)
-  localStorage.setItem('preset ' + new Date().toLocaleString(), JSON.stringify(weekGenerator))
+  const namePreset = 'preset ' + new Date().toLocaleString()
+  localStorage.setItem(namePreset, JSON.stringify(weekGenerator))
 
-  router.push({ name: 'sheduler' })
+  router.push({ name: 'sheduler' , query: { preset: namePreset } })
 
   console.log(
     weekGenerator,
@@ -170,7 +171,6 @@ const generateScheduler = () => {
 
 const updateRowHours = () => {
   products.value.forEach((item) => {
-    // console.log(item)
     if (item.daily) {
       item.all = item.hours * 5
     } else {
@@ -180,9 +180,11 @@ const updateRowHours = () => {
 }
 
 onMounted(() => {
-  const preset = router.currentRoute.value.query.preset;
+  const preset = router.currentRoute.value.query.preset as string;
   if(preset) {
-    const data = JSON.parse(localStorage.getItem(preset)).map(item => item.tasks).flat()
+    const data: Iproduct[] = JSON
+                              .parse(localStorage.getItem(preset) as string)
+                              .map((item:IweekGenerator) => item.tasks).flat()
     console.log(data)
     products.value = data
   }
@@ -201,14 +203,14 @@ watch(
 
 <template>
   <div class="panel">
-    <BaseButton text="Экспортировать" @click="() => exportWeek(str)" />
-    <BaseButton text="Экспортировать дефолтное" @click="() => exportDefault()" />
+    <BaseButton label="Экспортировать" @click="() => exportWeek(str)" />
+    <BaseButton label="Экспортировать дефолтное" @click="() => exportDefault()" />
   </div>
 
   <BaseListTable :products="products" :week="week" @removeItem="removeItem" @addItem="addItem" />
 
   <div class="panel">
-    <BaseButton text="Сгенерировать" @click="generateScheduler" />
+    <BaseButton label="Сгенерировать" @click="generateScheduler" />
   </div>
 </template>
 

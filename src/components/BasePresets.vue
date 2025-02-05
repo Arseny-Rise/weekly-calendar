@@ -5,34 +5,33 @@ import { ref, onMounted } from 'vue';
 import BaseButton from '@/components/BaseButton.vue';
 
 const shedulerStore = useShedulerStore()
-const presets = ref([])
+const presets = ref<{name: string, value: string}[]>([])
 
 const getPresets = () => {
-  // console.log(window.localStorage)
-  // for (item in window.localStorage) {
-  //   console.log(item)
-  //     // if(item.indexOf('preset') != -1) {
-  //     //   presets.value.push(item)
-  //     // }
-  // }
+  presets.value = []
+
   const localStorageSize = window.localStorage.length
     for (let i = 0; i < localStorageSize; i++) {
-      let item = window.localStorage.key(i)
+      const item = window.localStorage.key(i) as string;
       if(item.indexOf('preset') != -1) {
-        presets.value.push({name: item,value: window.localStorage.getItem(localStorage.key(i))})
-        console.log(item, window.localStorage.getItem(localStorage.key(i)))
+        presets.value.push({name: item, value: window.localStorage.getItem(localStorage.key(i) as string) as string})
       }
     }
 }
 
 const editPreset = (name: string) => {
-  shedulerStore.updateSheduler(JSON.parse(localStorage.getItem(name)))
+  shedulerStore.updateSheduler(JSON.parse(localStorage.getItem(name) as string))
   router.push({ name: 'list' , query: { preset: name } })
 }
 
 const openPreset = (name: string) => {
-  shedulerStore.updateSheduler(JSON.parse(localStorage.getItem(name)))
+  shedulerStore.updateSheduler(JSON.parse(localStorage.getItem(name) as string))
   router.push({ name: 'sheduler' , query: { preset: name } })
+}
+
+const deletePreset = (name: string) => {
+  localStorage.removeItem(name)
+  getPresets()
 }
 
 onMounted(() => {
@@ -49,6 +48,7 @@ onMounted(() => {
         <div class="preset__actions">
           <BaseButton label="изменить" @click="() => editPreset(item.name)" />
           <BaseButton label="открыть" @click="() => openPreset(item.name)" />
+          <BaseButton label="удалить" @click="() => deletePreset(item.name)" />
         </div>
       </div>
     </div>

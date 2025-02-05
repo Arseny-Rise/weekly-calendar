@@ -79,7 +79,7 @@ const columns = [
     </Column>
 
     <template #footer>
-      <BaseButton text="Добавить" @click="$emit('addItem')" />
+      <BaseButton label="Добавить" @click="$emit('addItem')" />
       <span>
         Total {{ total }}
       </span>
